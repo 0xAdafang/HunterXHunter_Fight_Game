@@ -1,0 +1,19 @@
+# Nom, Vie, Force, Vitesse, Intelligence, Nen, Experience
+Gon Freecss, 100, 90, 80, 70, Renforcement, 1000
+Killua Zoldyck, 90, 85, 95, 85, Transformation, 1200
+Hisoka Morow, 95, 80, 80, 90, Manipulation, 2000
+Kurapika, 85, 75, 70, 95, Matérialisation, 1500
+Leorio Paradinight, 70, 60, 55, 75, Émission, 600
+Chrollo Lucilfer, 100, 95, 85, 95, Spécialisation, 2500
+Meruem, 200, 150, 120, 100, Spécialisation, 5000
+Neferpitou, 150, 130, 110, 90, Renforcement, 3000
+Zeno Zoldyck, 120, 100, 90, 100, Émission, 3200
+Isaac Netero, 150, 110, 100, 105, Renforcement, 3500
+Uvogin, 140, 120, 80, 65, Renforcement, 2400
+Phinks, 110, 100, 85, 70, Renforcement, 1800
+Shalnark, 90, 70, 80, 90, Manipulation, 1600
+Machi, 95, 75, 85, 80, Transformation, 1500
+Feitan, 85, 90, 100, 70, Transformation, 1700
+Knuckle Bine, 105, 95, 85, 80, Émission, 1900
+Morel Mackernasey, 110, 85, 75, 100, Matérialisation, 2200
+Biscuit Krueger, 90, 80, 85, 95, Transformation, 2100
