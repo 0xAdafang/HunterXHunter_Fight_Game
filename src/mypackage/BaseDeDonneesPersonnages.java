@@ -29,19 +29,33 @@ public class BaseDeDonneesPersonnages
                     continue; // Ignorer les commentaires et les lignes vides
                 }
 
-                
                 String[] donnees = ligne.split(", ");
-                String nom = donnees[0];
-                int vie = Integer.parseInt(donnees[1]);
-                int force = Integer.parseInt(donnees[2]);
-                int vitesse = Integer.parseInt(donnees[3]);
-                int intelligence = Integer.parseInt(donnees[4]);
-                String nen = donnees[5];
-                int experience = Integer.parseInt(donnees[6]);
+                if (donnees.length == 10)
+                {
+                    String nom = donnees[0];
+                    int vie = Integer.parseInt(donnees[1]);
+                    int force = Integer.parseInt(donnees[2]);
+                    int vitesse = Integer.parseInt(donnees[3]);
+                    int intelligence = Integer.parseInt(donnees[4]);
+                    String nen = donnees[5];
+                    int experience = Integer.parseInt(donnees[6]);
+                    String capaciteOffensive = donnees[7];
+                    String capaciteDefensive = donnees[8];
+                    String capaciteEsquive = donnees[9];
+                    
+                    // Créer un perso et l'ajouter à la liste
+                    PersonnageHxH personnage = new PersonnageHxH(nom, vie, force, vitesse, intelligence, nen, experience, capaciteOffensive, capaciteDefensive, capaciteEsquive);
 
-                // Créer un perso et l'ajouter à la liste
-                PersonnageHxH personnage = new PersonnageHxH(nom, vie, force, vitesse, intelligence, nen, experience);
-                personnages.add(personnage);  
+                    // Validation avant ajout
+                    if (validerPersonnage(personnage))
+                    {
+                        personnages.add(personnage);
+                    }
+                }
+                else
+                {
+                    System.out.println("Erreur dans le format de la ligne : " + ligne);
+                }           
             }
             sc.close();  
         }
@@ -56,11 +70,58 @@ public class BaseDeDonneesPersonnages
     {
         for (PersonnageHxH personnage : personnages)  
         {
-            personnage.afficherInfo();
+            System.out.println("Nom: " + personnage.getNom());
+            System.out.println("Vie: " + personnage.getVie());
+            System.out.println("Force: " + personnage.getForce());
+            System.out.println("Vitesse: " + personnage.getVitesse());
+            System.out.println("Intelligence: " + personnage.getIntelligence());
+            System.out.println("Nen: " + personnage.getNen());
+            System.out.println("Expérience: " + personnage.getExperience());
+            System.out.println("----------------------------");
         }
     }
 
-    // Getters
+    // Méthode pour valider les personnages
+    public boolean validerPersonnage(PersonnageHxH personnage)
+    {
+        if (personnage.getVie() < 0 || personnage.getForce() < 0 || 
+            personnage.getVitesse() < 0 || personnage.getIntelligence() < 0 || 
+            personnage.getExperience() < 0)
+        {
+            System.out.println("Erreur: Les statistiques de " + personnage.getNom() + " sont invalides.");
+            return false;
+        }
+
+        String categorieNen = personnage.getNen();
+        if (!categorieNen.equalsIgnoreCase("Emission") &&
+            !categorieNen.equalsIgnoreCase("Renforcement") &&
+            !categorieNen.equalsIgnoreCase("Manipulation") &&
+            !categorieNen.equalsIgnoreCase("Matérialisation") &&
+            !categorieNen.equalsIgnoreCase("Transformation") &&
+            !categorieNen.equalsIgnoreCase("Spécialisation"))
+        {
+            System.out.println("Erreur: Catégorie Nen invalide pour " + personnage.getNom() + ".");
+            return false;
+        } 
+
+        return true;
+    }
+
+    // Méthode pour rechercher un personnage par nom
+    public PersonnageHxH rechercherPersonnageParNom(String nom)
+    {
+        for (PersonnageHxH personnage : personnages)
+        {
+            if (personnage.getNom().equalsIgnoreCase(nom))
+            {
+                return personnage;
+            }
+        }
+        System.out.println("Personnage avec le nom " + nom + " non trouvé.");
+        return null; // Si le personnage n'est pas trouvé
+    }
+
+    // Getter pour la liste des personnages
     public ArrayList<PersonnageHxH> getPersonnages()
     {
         return personnages;
