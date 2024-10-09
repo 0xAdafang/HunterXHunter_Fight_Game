@@ -1,111 +1,122 @@
 package mypackage;
 
-public class Combat 
-{
-    private PersonnageHxH joueur1;
-    private PersonnageHxH joueur2;
+import java.util.Random;
 
-    public Combat(PersonnageHxH joueur1, PersonnageHxH joueur2)
-    {
-        this.joueur1 = joueur1;
-        this.joueur2 = joueur2;
+public class Combat {
+    private PersonnageHxH joueur;
+    private PersonnageHxH adversaire;
+
+    // Constantes pour les choix d'action
+    private static final int ATTAQUE = 1;
+    private static final int DEFENSE = 2;
+    private static final int ESQUIVE = 3;
+
+    public Combat(PersonnageHxH joueur, PersonnageHxH adversaire) {
+        this.joueur = joueur;
+        this.adversaire = adversaire;
     }
 
-    public void lancerCombat()
-    {
-        System.out.println("Début de combat entre " + joueur1.getNom() + " VS " + joueur2.getNom());
+    public void lancerCombat() {
+        System.out.println("Début du combat entre " + joueur.getNom() + " et " + adversaire.getNom());
 
-        while (joueur1.getVie() > 0 && joueur2.getVie() > 0)
-        {
-            // joueur 1 attaque
-            attaquer(joueur1, joueur2);
-            if (joueur2.getVie() <= 0)
-            {
-                System.out.println(joueur2.getNom() + " est K.O ! ");
-                System.out.println(joueur1.getNom() + " l'emporte !");
-                break;
-            }
+        while (joueur.getVie() > 0 && adversaire.getVie() > 0) {
+            int choixJoueur = obtenirChoixAction(joueur); // choix du joueur
+            int choixAdversaire = obtenirChoixAction(adversaire);
 
-            // joueur 2 attaque
-            attaquer(joueur2, joueur1);
-            if (joueur1.getVie() <= 0)
-            {
-                System.out.println(joueur1.getNom() + " est K.O ! ");
-                System.out.println(joueur2.getNom() + " l'emporte !");
-                break;
-            }
+            // calcul coup critique
+            boolean coupCritiqueJoueur = joueur.getCapaciteOffensive().calculerCoupCritique(joueur.getIntelligence(), false);
+            boolean coupCritiqueAdversaire = adversaire.getCapaciteDefensive().calculerCoupCritique(adversaire.getIntelligence(), false);
+
+            boolean esquiveJoueur = joueur.getCapaciteEsquive().calculerEsquive(joueur.getVitesse());
+            boolean esquiveAdversaire = adversaire.getCapaciteEsquive().calculerEsquive(adversaire.getVitesse());
+
+            executerActionsSimultanees(choixJoueur, choixAdversaire, coupCritiqueJoueur, coupCritiqueAdversaire, esquiveJoueur, esquiveAdversaire);
+
+            // réduction cooldown
+            joueur.reductionCooldown();
+            adversaire.reductionCooldown();
+        }
+
+        afficherResultatCombat();
+    }
+
+    private int obtenirChoixAction(PersonnageHxH personnage) {
+        Random random = new Random();
+        if (personnage == joueur) {
+            // Remplace cette ligne par une saisie réelle si nécessaire
+            return ATTAQUE; // Choix par défaut pour le joueur
+        } else {
+            return random.nextInt(3) + 1; // 1: atq 2: def 3: esquive
         }
     }
 
-    // Méthode attaquer définie en dehors de lancerCombat
-    private void attaquer(PersonnageHxH attaquant, PersonnageHxH defenseur)
-    {
-        int degats = attaquant.getForce();// Calcul simple pour l'exemple
-        boolean coupCritique = Math.random() <0.15;
-
-        switch (attaquant.getCapaciteOffensive())
-        {
-            case "Pierre-feuille-Ciseaux":
-            degats *= (coupCritique) ? 3 : 2; //degats triplé si coup critique
-            System.out.println(attaquant.getNom() + "Utilise utilise Pierre-feuille-Ciseaux !");
-
-            default :
-            if (coupCritique)
-            {
-                degats *= 2; //coup critique double attaque si pas de capacité utilisées
-                System.out.println("Coup critique !");
+    private void executerActionsSimultanees(int choixJoueur, int choixAdversaire, boolean coupCritiqueJoueur, boolean coupCritiqueAdversaire, boolean esquiveJoueur, boolean esquiveAdversaire) {
+        if (choixJoueur == ESQUIVE) {
+            if (!esquiveAdversaire) {
+                System.out.println(joueur.getNom() + " a esquivé l'attaque de " + adversaire.getNom());
+                return; // Si le joueur esquive, on ne fait rien d'autre
             }
-            break;
-        }
-        
-        switch (defenseur.getCapaciteDefensive())
-        {
-            case "Bras de fer":
-            if (coupCritique)
-            {
-                System.out.println(defenseur.getNom() + " utilise Bras de fer + et annule le coup critique !");
-                degats = 0; // annulation Coup critique
-            }
-            else 
-            {
-                degats /= 2; //reduction de degats
-                System.out.println(defenseur.getNom() + "utilise Bras de fer + pour reduire les degats !");
-            }
-            break;
-
-            default:
-                 break;
-
         }
 
-        switch (defenseur.getCapaciteEsquive()) {
-            case "Bond":
-                if (Math.random() < 0.25) //25% d'esquive totale
-                {
-                    System.out.println(defenseur.getNom() + "utilise Bond et esquive l'attaque");
-                    degats = 0; //annulation degats
-                }               
-                break;
-        
-            default:
-                break;
+        if (choixJoueur == ATTAQUE && choixAdversaire == ATTAQUE) {
+            executerAttaqueSimultanee(coupCritiqueJoueur, coupCritiqueAdversaire, esquiveJoueur, esquiveAdversaire);
+        } else if (choixJoueur == DEFENSE && choixAdversaire == ATTAQUE) {
+            executerDefense(coupCritiqueAdversaire, esquiveJoueur);
+        } else if (choixJoueur == ATTAQUE && choixAdversaire == DEFENSE) {
+            executerAttaqueAvecDefense(coupCritiqueJoueur, esquiveAdversaire);
+        }
+    }
+
+    private void executerAttaqueSimultanee(boolean coupCritiqueJoueur, boolean coupCritiqueAdversaire, boolean esquiveJoueur, boolean esquiveAdversaire) {
+        if (!esquiveAdversaire) {
+            int degatsJoueur = joueur.getCapaciteOffensive().activer(joueur, adversaire, coupCritiqueJoueur);
+            adversaire.setVie(adversaire.getVie() - degatsJoueur);
+            System.out.println(adversaire.getNom() + " a maintenant " + adversaire.getVie() + " points de vie.");
+        } else {
+            System.out.println(adversaire.getNom() + " a esquivé l'attaque de " + joueur.getNom());
         }
 
-        //applique les degats finaux sur le personnage
-        defenseur.setVie(defenseur.getVie() - degats);
-
-        //affichage du resultat de l'attaque
-        if(degats > 0)
-        {
-            System.out.println(attaquant.getNom() + "attaque " + defenseur.getNom() + "pour " + degats + " dégats !");
+        if (!esquiveJoueur) {
+            int degatsAdversaire = adversaire.getCapaciteOffensive().activer(adversaire, joueur, coupCritiqueAdversaire);
+            joueur.setVie(joueur.getVie() - degatsAdversaire);
+            System.out.println(joueur.getNom() + " a maintenant " + joueur.getVie() + " points de vie.");
+        } else {
+            System.out.println(joueur.getNom() + " a esquivé l'attaque de " + adversaire.getNom());
         }
-        else
-        {
-            System.out.println(defenseur.getNen() + " a esquivé ou annulé l'attaque ! ");
-        }
-        
+    }
 
+    public void executerDefense(boolean coupCritiqueAdversaire, boolean esquiveJoueur) {
+        if (!esquiveJoueur) {
+            int degatsAdversaire = adversaire.getCapaciteOffensive().activer(adversaire, joueur, coupCritiqueAdversaire);
+            int degatsReduits = joueur.getCapaciteDefensive().activer(adversaire, joueur, coupCritiqueAdversaire);
+            
+            // Réduire la vie du joueur en tenant compte de la défense
+            joueur.setVie(joueur.getVie() - degatsAdversaire + degatsReduits);
+            System.out.println(joueur.getNom() + " a maintenant " + joueur.getVie() + " points de vie.");
+        } else {
+            System.out.println(joueur.getNom() + " a esquivé l'attaque de " + adversaire.getNom());
+        }
+    }
+
+    private void executerAttaqueAvecDefense(boolean coupCritiqueJoueur, boolean esquiveAdversaire) {
+        if (!esquiveAdversaire) {
+            int degatsJoueur = joueur.getCapaciteOffensive().activer(joueur, adversaire, coupCritiqueJoueur);
+            adversaire.setVie(adversaire.getVie() - degatsJoueur);
+            System.out.println(adversaire.getNom() + " a maintenant " + adversaire.getVie() + " points de vie.");
+        } else {
+            System.out.println(adversaire.getNom() + " a esquivé l'attaque de " + joueur.getNom());
+        }
+    }
+
+    private void afficherResultatCombat() {
+        if (joueur.getVie() <= 0) {
+            System.out.println(joueur.getNom() + " est vaincu !");
+        } else {
+            System.out.println(adversaire.getNom() + " est vaincu !");
+        }
     }
 }
+
+
 
 
