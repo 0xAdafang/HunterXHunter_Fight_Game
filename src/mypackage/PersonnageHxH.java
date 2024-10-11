@@ -1,7 +1,8 @@
 package mypackage;
 import java.util.ArrayList;
 
-public class PersonnageHxH {
+public class PersonnageHxH 
+{
     private String nom;
     private int vie;
     private int force;
