@@ -51,4 +51,9 @@ public class CapaciteOffensive extends CapaciteNen
             cooldown--;
         }
     }
+    @Override
+    public String toString() 
+    {
+    return "Capacité Offensive: " + nom + " (Cooldown: " + cooldown + " tours)";
+    }
 }

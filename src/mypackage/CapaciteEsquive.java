@@ -51,4 +51,9 @@ public class CapaciteEsquive extends CapaciteNen
             cooldown--;
         }
     }
+    @Override
+    public String toString() 
+    {
+    return "Capacité Esquive: " + nom + " (Cooldown: " + cooldown + " tours)";
+    }
 }
