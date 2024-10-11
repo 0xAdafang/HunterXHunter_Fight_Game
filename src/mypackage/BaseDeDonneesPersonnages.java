@@ -39,16 +39,19 @@ public class BaseDeDonneesPersonnages
                     int intelligence = Integer.parseInt(donnees[4]);
                     String nen = donnees[5];
                     int experience = Integer.parseInt(donnees[6]);
-                    String capaciteOffensive = donnees[7];
-                    String capaciteDefensive = donnees[8];
-                    String capaciteEsquive = donnees[9];
                     
-                    // Créer un perso et l'ajouter à la liste
-                    PersonnageHxH personnage = new PersonnageHxH(nom, vie, force, vitesse, intelligence, nen, experience, capaciteOffensive, capaciteDefensive, capaciteEsquive);
-
+                    
+                    String strCapaciteOffensive = donnees[7];
+                    CapaciteOffensive capaciteOffensive = new CapaciteOffensive(strCapaciteOffensive, 2);
+                    String strCapaciteDefensive = donnees[8];
+                    CapaciteDefensive capaciteDefensive  = new CapaciteDefensive(strCapaciteDefensive, 2);
+                    String strCapaciteEsquive = donnees[9];
+                    CapaciteEsquive capaciteEsquive = new CapaciteEsquive(strCapaciteEsquive, 3);
+                    
                     // Validation avant ajout
-                    if (validerPersonnage(personnage))
+                    if (validerPersonnage(nom, vie, force, vitesse, intelligence, nen, experience, strCapaciteOffensive, strCapaciteDefensive, strCapaciteEsquive)) 
                     {
+                        PersonnageHxH personnage = new PersonnageHxH(nom, vie, force, vitesse, intelligence, nen, experience, capaciteOffensive, capaciteDefensive, capaciteEsquive);
                         personnages.add(personnage);
                     }
                 }
@@ -65,34 +68,37 @@ public class BaseDeDonneesPersonnages
         }
     }
 
-    // Méthode pour afficher les persos chargés
+   // Méthode pour afficher les persos chargés
     public void afficherPersonnage()
     {
         for (PersonnageHxH personnage : personnages)  
         {
-            System.out.println("Nom: " + personnage.getNom());
-            System.out.println("Vie: " + personnage.getVie());
-            System.out.println("Force: " + personnage.getForce());
-            System.out.println("Vitesse: " + personnage.getVitesse());
-            System.out.println("Intelligence: " + personnage.getIntelligence());
-            System.out.println("Nen: " + personnage.getNen());
-            System.out.println("Expérience: " + personnage.getExperience());
-            System.out.println("----------------------------");
+        System.out.println("Nom: " + personnage.getNom());
+        System.out.println("Vie: " + personnage.getVie());
+        System.out.println("Force: " + personnage.getForce());
+        System.out.println("Vitesse: " + personnage.getVitesse());
+        System.out.println("Intelligence: " + personnage.getIntelligence());
+        System.out.println("Nen: " + personnage.getNen());
+        System.out.println("Expérience: " + personnage.getExperience());
+        System.out.println("Capacité Offensive: " + personnage.getCapaciteOffensive());
+        System.out.println("Capacité Défensive: " + personnage.getCapaciteDefensive());
+        System.out.println("Capacité Esquive: " + personnage.getCapaciteEsquive());
+        System.out.println("----------------------------");
         }
     }
 
     // Méthode pour valider les personnages
-    public boolean validerPersonnage(PersonnageHxH personnage)
+    public boolean validerPersonnage(String nom, int vie, int force, int vitesse, int intelligence, String nen, int experience, String capaciteOffensive, String capaciteDefensive, String capaciteEsquive)
     {
-        if (personnage.getVie() < 0 || personnage.getForce() < 0 || 
-            personnage.getVitesse() < 0 || personnage.getIntelligence() < 0 || 
-            personnage.getExperience() < 0)
+        if (vie < 0 || force < 0 || 
+            vitesse < 0 || intelligence < 0 || 
+            experience < 0)
         {
-            System.out.println("Erreur: Les statistiques de " + personnage.getNom() + " sont invalides.");
+            System.out.println("Erreur: Les statistiques de " + nom + " sont invalides.");
             return false;
         }
 
-        String categorieNen = personnage.getNen();
+        String categorieNen = nen;
         if (!categorieNen.equalsIgnoreCase("Emission") &&
             !categorieNen.equalsIgnoreCase("Renforcement") &&
             !categorieNen.equalsIgnoreCase("Manipulation") &&
@@ -100,7 +106,7 @@ public class BaseDeDonneesPersonnages
             !categorieNen.equalsIgnoreCase("Transformation") &&
             !categorieNen.equalsIgnoreCase("Spécialisation"))
         {
-            System.out.println("Erreur: Catégorie Nen invalide pour " + personnage.getNom() + ".");
+            System.out.println("Erreur: Catégorie Nen invalide pour " + nom + ".");
             return false;
         } 
 
@@ -108,11 +114,11 @@ public class BaseDeDonneesPersonnages
     }
 
     // Méthode pour rechercher un personnage par nom
-    public PersonnageHxH rechercherPersonnageParNom(String nom)
+    public PersonnageHxH rechercherPersonnageParNom(String nom) 
     {
-        for (PersonnageHxH personnage : personnages)
+        for (PersonnageHxH personnage : personnages) 
         {
-            if (personnage.getNom().equalsIgnoreCase(nom))
+            if (personnage.getNom().toLowerCase().contains(nom.toLowerCase())) 
             {
                 return personnage;
             }
