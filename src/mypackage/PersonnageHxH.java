@@ -89,6 +89,11 @@ public class PersonnageHxH
         return capaciteEsquive;
     }
 
+    public void ajouterVie(int point)
+    {
+        this.vie = Math.min(this.vie + point, 1000);
+    }
+
     public ArrayList<String> getCapacites() 
     {
         ArrayList<String> capacites = new ArrayList<>();
