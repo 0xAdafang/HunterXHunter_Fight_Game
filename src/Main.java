@@ -46,6 +46,7 @@ public class Main
                 if (!combatEnCours) 
                 {
                     System.out.println("K.O !");
+                    combat.afficherResultatCombat();
                 }
             }
         } 
