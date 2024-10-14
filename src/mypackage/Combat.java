@@ -1,8 +1,7 @@
 package mypackage;
 
-import java.util.Random;
-
-public class Combat {
+public class Combat 
+{
     private PersonnageHxH joueur;
     private PersonnageHxH adversaire;
 
@@ -71,13 +70,17 @@ public class Combat {
     // Méthode pour gérer les attaques simultanées entre les deux personnages
     private void executerAttaqueSimultanee(boolean coupCritiqueJoueur, boolean coupCritiqueAdversaire, boolean esquiveJoueur, boolean esquiveAdversaire) 
     {
+        int degatsJoueur = 0;
+        int degatsAdversaire = 0;
+
         // Si l'adversaire n'a pas esquivé l'attaque
         if (!esquiveAdversaire) 
         {
-            int degatsJoueur = joueur.getCapaciteOffensive().activer(joueur, adversaire, coupCritiqueJoueur);
+            degatsJoueur = joueur.getCapaciteOffensive().activer(joueur, adversaire, 0, coupCritiqueJoueur);
             adversaire.setVie(adversaire.getVie() - degatsJoueur);
             System.out.println(adversaire.getNom() + " a maintenant " + adversaire.getVie() + " points de vie.");
-        } else 
+        } 
+        else 
         {
             System.out.println(adversaire.getNom() + " a esquivé l'attaque de " + joueur.getNom());
         }
@@ -85,10 +88,11 @@ public class Combat {
         // Si le joueur n'a pas esquivé l'attaque de l'adversaire
         if (!esquiveJoueur) 
         {
-            int degatsAdversaire = adversaire.getCapaciteOffensive().activer(adversaire, joueur, coupCritiqueAdversaire);
+            degatsAdversaire = adversaire.getCapaciteOffensive().activer(adversaire, joueur, 0, coupCritiqueAdversaire);
             joueur.setVie(joueur.getVie() - degatsAdversaire);
             System.out.println(joueur.getNom() + " a maintenant " + joueur.getVie() + " points de vie.");
-        } else 
+        } 
+        else 
         {
             System.out.println(joueur.getNom() + " a esquivé l'attaque de " + adversaire.getNom());
         }
@@ -97,14 +101,17 @@ public class Combat {
     // Méthode pour gérer la défense du joueur contre une attaque de l'adversaire
     public void executerDefense(boolean coupCritiqueAdversaire, boolean esquiveJoueur) 
     {
-        if (!esquiveJoueur) {
-            int degatsAdversaire = adversaire.getCapaciteOffensive().activer(adversaire, joueur, coupCritiqueAdversaire);
-            int degatsReduits = joueur.getCapaciteDefensive().activer(adversaire, joueur, coupCritiqueAdversaire);
+        if (!esquiveJoueur) 
+        {
+            int degatsAdversaire = adversaire.getCapaciteOffensive().activer(adversaire, joueur, 0, coupCritiqueAdversaire);
+            int degatsReduits = joueur.getCapaciteDefensive().activer(adversaire, joueur, 0, coupCritiqueAdversaire);
 
             // Réduire la vie du joueur en tenant compte de sa capacité défensive
-            joueur.setVie(joueur.getVie() - degatsAdversaire + degatsReduits);
+            joueur.setVie(joueur.getVie() - (degatsAdversaire - degatsReduits));
             System.out.println(joueur.getNom() + " a maintenant " + joueur.getVie() + " points de vie.");
-        } else {
+        } 
+        else 
+        {
             System.out.println(joueur.getNom() + " a esquivé l'attaque de " + adversaire.getNom());
         }
     }
@@ -112,21 +119,27 @@ public class Combat {
     // Méthode pour gérer une attaque contre un adversaire qui se défend
     private void executerAttaqueAvecDefense(boolean coupCritiqueJoueur, boolean esquiveAdversaire) 
     {
-        if (!esquiveAdversaire) {
-            int degatsJoueur = joueur.getCapaciteOffensive().activer(joueur, adversaire, coupCritiqueJoueur);
+        if (!esquiveAdversaire) 
+        {
+            int degatsJoueur = joueur.getCapaciteOffensive().activer(joueur, adversaire, 0, coupCritiqueJoueur);
             adversaire.setVie(adversaire.getVie() - degatsJoueur);
             System.out.println(adversaire.getNom() + " a maintenant " + adversaire.getVie() + " points de vie.");
-        } else {
+        } 
+        else 
+        {
             System.out.println(adversaire.getNom() + " a esquivé l'attaque de " + joueur.getNom());
         }
     }
 
     // Méthode pour afficher le résultat final du combat
-    private void afficherResultatCombat() 
+    public void afficherResultatCombat() 
     {
-        if (joueur.getVie() <= 0) {
+        if (joueur.getVie() <= 0) 
+        {
             System.out.println(joueur.getNom() + " est vaincu !");
-        } else {
+        } 
+        else 
+        {
             System.out.println(adversaire.getNom() + " est vaincu !");
         }
     }
