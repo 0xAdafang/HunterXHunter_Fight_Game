@@ -23,28 +23,36 @@ public abstract class CapaciteNen
         tourRestants = cooldown;
     }
 
-    public abstract int activer(PersonnageHxH attaquant, PersonnageHxH defenseur, boolean coupCritique);
+    // Mise à jour de la signature de la méthode abstraite
+    public abstract int activer(PersonnageHxH attaquant, PersonnageHxH defenseur, int degatsRecus, boolean coupCritique);
 
     public String getNom() 
     {
         return nom;
     }
 
+     // Nouvelle méthode soigner - Par défaut, rend 0 points de vie
+     public int soigner(PersonnageHxH personnage) 
+    {
+        return 0;  // Certaines capacités ne feront rien en termes de soin
+    }
+
     public void decrementerCooldown() 
     {
-        if (tourRestants > 0) { // Correction ici pour utiliser tourRestants
+        if (tourRestants > 0) {
             tourRestants--;
         }
     }
 
     public void setCooldown(int tours) 
-    { // Modification ici pour accepter un paramètre
+    {
         this.cooldown = tours;
     }
+
     @Override
     public String toString() 
     {
-    return nom + " (Cooldown: " + cooldown + " tours)";
+        return nom + " (Cooldown: " + cooldown + " tours)";
     }
 }
 
