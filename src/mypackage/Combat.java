@@ -33,6 +33,10 @@ public class Combat
         joueur.reductionCooldown();
         adversaire.reductionCooldown();
 
+        //chance d'annuler un cooldown par l'experience
+        chanceAnnulerCooldown(joueur);
+        chanceAnnulerCooldown(adversaire);
+
         // Vérification si un des personnages est KO
         return joueur.getVie() > 0 && adversaire.getVie() > 0;
     }
@@ -128,6 +132,18 @@ public class Combat
         else 
         {
             System.out.println(adversaire.getNom() + " a esquivé l'attaque de " + joueur.getNom());
+        }
+    }
+
+    private void chanceAnnulerCooldown (PersonnageHxH personnage)
+    {
+        int experience = personnage.getExperience();
+        double chance = experience / 5000.0;
+
+        if (Math.random() < chance)
+        {
+            personnage.annulerCooldown();
+            System.out.println(personnage.getNom() + " a réussi à annuler un cooldown !");
         }
     }
 
