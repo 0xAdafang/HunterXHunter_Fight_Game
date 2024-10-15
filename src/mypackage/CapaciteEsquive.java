@@ -1,9 +1,36 @@
 package mypackage;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class CapaciteEsquive extends CapaciteNen 
 {
+    private static final Map<String, Double> chancesEsquive = new HashMap<>();
+
+    // Initialisation statique de la HashMap avec les capacités et leurs chances d'esquive
+    static 
+    {
+        chancesEsquive.put("Bond", 0.25); //Gon
+        chancesEsquive.put("Lightning Step", 0.3);   // Killua
+        chancesEsquive.put("Pluie de Cartes", 0.2);  // Hisoka
+        chancesEsquive.put("Activation des Yeux Écarlates", 0.15);  // Kurapika
+        chancesEsquive.put("Réflexe Chirurgical", 0.2);  // Leorio
+        chancesEsquive.put("Disparition Furtive", 0.35);  // Zeno
+        chancesEsquive.put("Esquive Tactique", 0.3);  // Shalnark
+        chancesEsquive.put("Esquive Rapide", 0.25);   // Knuckle
+        chancesEsquive.put("Pas Enchanté", 0.2);      // Biscuit
+        chancesEsquive.put("Saut Félin", 0.3);        // Neferpitou
+        chancesEsquive.put("Mur de Nen", 0.25);       // Isaac Netero
+        chancesEsquive.put("Armure Physique", 0.2);   // Uvogin
+        chancesEsquive.put("Frappe Aveugle", 0.25);   // Phinks
+        chancesEsquive.put("Stratégie de Fumée", 0.2);  // Morel
+        chancesEsquive.put("Déplacement Furtif", 0.3); // Machi
+        chancesEsquive.put("Vitesse de l’Ombre", 0.3); // Feitan
+        chancesEsquive.put("Instinct Royal", 0.3); // Meruem
+        chancesEsquive.put("Camouflage d'Ombre", 0.25); //Chrollo
+    }
+
     public CapaciteEsquive(String nom, int cooldown) 
     {
         super(nom, cooldown);
@@ -12,128 +39,16 @@ public class CapaciteEsquive extends CapaciteNen
     @Override
     public int activer(PersonnageHxH attaquant, PersonnageHxH defenseur, int degatsRecus, boolean coupCritique) 
     {
-        int degatsReduits = 0; // Dégâts à renvoyer
+        // Récupération de la chance d'esquive associée à la capacité
+        double chance = chancesEsquive.getOrDefault(nom, 0.0);
 
-        switch (nom) {
-            case "Bond":
-                if (Math.random() < 0.25) {  // 25% de chance d'esquiver avec cette capacité
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0;  // Esquive réussie, pas de dégâts
-                }
-                break;
-
-            case "Lightning Step":  // Killua
-                if (Math.random() < 0.3) { // 30% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Pluie de Cartes":  // Hisoka
-                if (Math.random() < 0.2) { // 20% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Activation des Yeux Écarlates":  // Kurapika
-                if (Math.random() < 0.15) { // 15% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Réflexe Chirurgical":  // Leorio
-                if (Math.random() < 0.2) { // 20% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Disparition Furtive":  // Zeno
-                if (Math.random() < 0.35) { // 35% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Esquive Tactique":  // Shalnark
-                if (Math.random() < 0.3) { // 30% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Esquive Rapide":  // Knuckle
-                if (Math.random() < 0.25) { // 25% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Pas Enchanté":  // Biscuit
-                if (Math.random() < 0.2) { // 20% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            // Ajout des autres capacités
-            case "Saut Félin":  // Neferpitou
-                if (Math.random() < 0.3) { // 30% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Mur de Nen":  // Isaac Netero
-                if (Math.random() < 0.25) { // 25% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Armure Physique":  // Uvogin
-                if (Math.random() < 0.2) { // 20% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Frappe Aveugle":  // Phinks
-                if (Math.random() < 0.25) { // 25% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Stratégie de Fumée":  // Morel
-                if (Math.random() < 0.2) { // 20% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Déplacement Furtif":  // Machi
-                if (Math.random() < 0.3) { // 30% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            case "Vitesse de l’Ombre":  // Feitan
-                if (Math.random() < 0.3) { // 30% de chance d'esquiver
-                    System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
-                    return 0; // Esquive réussie
-                }
-                break;
-
-            default:
-                System.out.println("Capacité d'esquive inconnue.");
-                return attaquant.getForce(); // Retourne la force de l'attaquant si l'esquive échoue
+        if (Math.random() < chance) 
+        {
+            System.out.println(defenseur.getNom() + " utilise " + nom + " et esquive l'attaque !");
+            return 0;  // Esquive réussie, pas de dégâts
         }
 
-        // Si aucune esquive n'a réussi
+        // Si l'esquive échoue
         System.out.println(defenseur.getNom() + " a échoué à esquiver l'attaque et subit " + degatsRecus + " dégâts !");
         resetCooldown();  // Réinitialisation du cooldown
         return degatsRecus; // Retourne les dégâts reçus
@@ -174,12 +89,12 @@ public class CapaciteEsquive extends CapaciteNen
         int intelligenceEsquiveur = esquiveur.getIntelligence();
         int vitesseAdversaire = adversaire.getVitesse();
         int chanceEsquive = intelligenceEsquiveur - vitesseAdversaire;
-    
+
         Random random = new Random();
         int seuil = random.nextInt(100);
-    
+
         boolean esquiveReussie = chanceEsquive > seuil;
-    
+
         System.out.println(esquiveur.getNom() + (esquiveReussie ? " esquive l'attaque !" : " échoue à esquiver."));
         resetCooldown();
         return esquiveReussie;

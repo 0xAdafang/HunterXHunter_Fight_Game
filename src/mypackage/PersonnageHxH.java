@@ -70,8 +70,16 @@ public class PersonnageHxH
         return experience;
     }
 
-    public void setVie(int vie) {
-        this.vie = vie;
+    public void setVie (int newVie)
+    {
+        if (newVie < 0)
+        {
+            this.vie = 0;
+        }
+        else
+        {
+            this.vie = newVie;
+        }
     }
 
     public CapaciteOffensive getCapaciteOffensive() 
@@ -118,6 +126,13 @@ public class PersonnageHxH
                "Attaque - " + capaciteOffensive.getCooldown() + ", " +
                "Défense - " + capaciteDefensive.getCooldown() + ", " +
                "Esquive - " + capaciteEsquive.getCooldown();
+    }
+
+    public void annulerCooldown() 
+    {
+        if (capaciteOffensive != null) capaciteOffensive.resetCooldown();
+        if (capaciteDefensive != null) capaciteDefensive.resetCooldown();
+        if (capaciteEsquive != null) capaciteEsquive.resetCooldown();
     }
 
     // Méthode pour réduire les cooldowns
