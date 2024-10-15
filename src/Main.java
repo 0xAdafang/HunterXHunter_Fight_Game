@@ -22,6 +22,7 @@ public class Main
         PersonnageHxH joueur2 = choisirPersonnageJoueur(bddPersonnages.getPersonnages(), "Choisissez le personnage de l'ordinateur :");
 
         System.out.println(joueur1.getNom() + " VS " + joueur2.getNom());
+        System.out.println("Le combat commence !");
 
         // Lancer le combat une fois que le choix des personnages est valide
         if (joueur1 != null && joueur2 != null) 
@@ -42,6 +43,10 @@ public class Main
 
                 // Lancer un tour de combat en fonction des choix établis
                 combatEnCours = combat.lancerTour(actionJoueur, actionOrdinateur);
+
+                System.out.println("\n--- État des personnages après ce tour ---");
+                System.out.println(joueur1.getEtat());
+                System.out.println(joueur2.getEtat());
 
                 if (!combatEnCours) 
                 {
