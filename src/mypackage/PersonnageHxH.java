@@ -15,9 +15,11 @@ public class PersonnageHxH
     private CapaciteDefensive capaciteDefensive;
     private CapaciteEsquive capaciteEsquive;
 
+    private CapaciteUltime capaciteUltime;
+
     // Constructeur de la classe
     public PersonnageHxH(String nom, int vie, int force, int vitesse, int intelligence, String nen, int experience, 
-                        CapaciteOffensive capaciteOffensive, CapaciteDefensive capaciteDefensive, CapaciteEsquive capaciteEsquive) 
+                        CapaciteOffensive capaciteOffensive, CapaciteDefensive capaciteDefensive, CapaciteEsquive capaciteEsquive, CapaciteUltime capaciteUltime) 
     {
         this.nom = nom;
         this.vie = vie;
@@ -30,6 +32,8 @@ public class PersonnageHxH
         this.capaciteOffensive = capaciteOffensive;
         this.capaciteDefensive = capaciteDefensive;
         this.capaciteEsquive = capaciteEsquive;
+
+        this.capaciteUltime = capaciteUltime;
     }
 
    
@@ -95,6 +99,11 @@ public class PersonnageHxH
     public CapaciteEsquive getCapaciteEsquive() 
     {
         return capaciteEsquive;
+    }
+
+    public CapaciteUltime getCapaciteUltime()
+    {
+        return capaciteUltime;
     }
 
     public void ajouterVie(int point)
