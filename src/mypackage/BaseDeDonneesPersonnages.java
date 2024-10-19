@@ -30,7 +30,7 @@ public class BaseDeDonneesPersonnages
                 }
 
                 String[] donnees = ligne.split(", ");
-                if (donnees.length == 10)
+                if (donnees.length == 11)
                 {
                     String nom = donnees[0];
                     int vie = Integer.parseInt(donnees[1]);
@@ -47,11 +47,13 @@ public class BaseDeDonneesPersonnages
                     CapaciteDefensive capaciteDefensive  = new CapaciteDefensive(strCapaciteDefensive, 2);
                     String strCapaciteEsquive = donnees[9];
                     CapaciteEsquive capaciteEsquive = new CapaciteEsquive(strCapaciteEsquive, 3);
+                    String strCapaciteUltime = donnees[10];
+                    CapaciteUltime capaciteUltime = new CapaciteUltime(strCapaciteUltime, 3, 0.2);
                     
                     // Validation avant ajout
                     if (validerPersonnage(nom, vie, force, vitesse, intelligence, nen, experience, strCapaciteOffensive, strCapaciteDefensive, strCapaciteEsquive)) 
                     {
-                        PersonnageHxH personnage = new PersonnageHxH(nom, vie, force, vitesse, intelligence, nen, experience, capaciteOffensive, capaciteDefensive, capaciteEsquive);
+                        PersonnageHxH personnage = new PersonnageHxH(nom, vie, force, vitesse, intelligence, nen, experience, capaciteOffensive, capaciteDefensive, capaciteEsquive, capaciteUltime);
                         personnages.add(personnage);
                     }
                 }
