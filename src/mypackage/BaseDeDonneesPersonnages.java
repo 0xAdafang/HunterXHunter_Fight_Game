@@ -48,7 +48,7 @@ public class BaseDeDonneesPersonnages
                     String strCapaciteEsquive = donnees[9];
                     CapaciteEsquive capaciteEsquive = new CapaciteEsquive(strCapaciteEsquive, 3);
                     String strCapaciteUltime = donnees[10];
-                    CapaciteUltime capaciteUltime = new CapaciteUltime(strCapaciteUltime, 3, 0.2);
+                    CapaciteUltime capaciteUltime = new CapaciteUltime(strCapaciteUltime,0.2);
                     
                     // Validation avant ajout
                     if (validerPersonnage(nom, vie, force, vitesse, intelligence, nen, experience, strCapaciteOffensive, strCapaciteDefensive, strCapaciteEsquive)) 
