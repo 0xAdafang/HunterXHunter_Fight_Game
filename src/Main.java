@@ -4,11 +4,11 @@ import mypackage.PersonnageHxH;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Random;
 
-public class Main 
-{
+public class Main {
     public static void main(String[] args) 
-    { 
+    {
         BaseDeDonneesPersonnages bddPersonnages = new BaseDeDonneesPersonnages();
 
         // Charger le fichier depuis la source correcte
@@ -28,18 +28,54 @@ public class Main
         if (joueur1 != null && joueur2 != null) 
         {
             Combat combat = new Combat(joueur1, joueur2);
-            
             boolean combatEnCours = true;
 
-            while (combatEnCours) 
-            {
+            while (combatEnCours) {
                 // Tour du joueur - choisir une action
                 int actionJoueur = obtenirChoixAction(joueur1);
-                System.out.println(joueur1.getNom() + " utilise " + actionToString(actionJoueur) + ": " + joueur1.getCapacites().get(actionJoueur - 1));
+
+                // Gérer l'indisponibilité des capacités offensives
+                if (joueur1.getCapaciteOffensive().estIndisponible()) 
+                {
+                    System.out.println(joueur1.getNom() + " ne peut pas utiliser son attaque ce tour-ci !");
+                } 
+                else 
+                {
+                    if (actionJoueur == 4)
+                    {
+                        System.out.println(joueur1.getNom() + " utilise la Capacité Ultime: " + joueur1.getCapaciteUltime().getNom());
+                        int degatsUltime = joueur1.getCapaciteUltime().activer(joueur1, joueur2);
+                        joueur2.setVie(joueur2.getVie() - degatsUltime);
+                        System.out.println(joueur2.getNom() + " a pris " + degatsUltime + " dégâts.");
+                        
+                        // Réinitialiser le compteur de tours de la capacité ultime après utilisation
+                        joueur1.getCapaciteUltime().resetToursDepuisDebut();
+                    } else {
+                        System.out.println(joueur1.getNom() + " utilise " + actionToString(actionJoueur) + ": " + joueur1.getCapacites().get(actionJoueur - 1));
+                    }
+                }
 
                 // Tour de l'ordinateur - choisir une action aléatoire
-                int actionOrdinateur = choisirActionAleatoire();
-                System.out.println(joueur2.getNom() + " utilise " + actionToString(actionOrdinateur) + ": " + joueur2.getCapacites().get(actionOrdinateur - 1));
+                int actionOrdinateur = choisirActionAleatoire(joueur2);
+
+                // Gérer l'indisponibilité des capacités offensives
+                if (joueur2.getCapaciteOffensive().estIndisponible()) 
+                {
+                    System.out.println(joueur2.getNom() + " ne peut pas utiliser son attaque ce tour-ci !");
+                } else {
+                    if (actionOrdinateur == 4) 
+                    {
+                        System.out.println(joueur2.getNom() + " utilise la Capacité Ultime: " + joueur2.getCapaciteUltime().getNom());
+                        int degatsUltime = joueur2.getCapaciteUltime().activer(joueur2, joueur1);
+                        joueur1.setVie(joueur1.getVie() - degatsUltime);
+                        System.out.println(joueur1.getNom() + " a pris " + degatsUltime + " dégâts.");
+                        
+                        // Réinitialiser le compteur de tours de la capacité ultime après utilisation
+                        joueur2.getCapaciteUltime().resetToursDepuisDebut();
+                    } else {
+                        System.out.println(joueur2.getNom() + " utilise " + actionToString(actionOrdinateur) + ": " + joueur2.getCapacites().get(actionOrdinateur - 1));
+                    }
+                }
 
                 // Lancer un tour de combat en fonction des choix établis
                 combatEnCours = combat.lancerTour(actionJoueur, actionOrdinateur);
@@ -48,8 +84,7 @@ public class Main
                 System.out.println(joueur1.getEtat());
                 System.out.println(joueur2.getEtat());
 
-                if (!combatEnCours) 
-                {
+                if (!combatEnCours) {
                     System.out.println("K.O !");
                     combat.afficherResultatCombat();
                 }
@@ -93,40 +128,48 @@ public class Main
 
         System.out.println(personnage.getEtat());
 
-        // Récupérer les capacités du personnage
-        ArrayList<String> capacites = personnage.getCapacites(); // Assurez-vous que cette méthode est définie dans PersonnageHxH
+        ArrayList<String> capacites = personnage.getCapacites();
 
-        // Afficher les capacités avec les types d'actions
-        for (int i = 0; i < capacites.size(); i++) 
-        {
+        for (int i = 0; i < capacites.size(); i++) {
             String capacite = capacites.get(i);
-            String action = "";
-            if (i == 0) {
-                action = "Attaquer"; // Première capacité est l'attaque
-            } else if (i == 1) {
-                action = "Défendre"; // Deuxième capacité est la défense
-            } else if (i == 2) {
-                action = "Esquiver"; // Troisième capacité est l'esquive
-            }
+            String action = (i == 0) ? "Attaquer" : (i == 1) ? "Defendre" : "Esquiver";
             System.out.println((i + 1) + ": " + action + " (" + capacite + ")");
         }
 
+        // Afficher la disponibilité de la capacité ultime
+        int toursRestants = 3 - personnage.getCapaciteUltime().getToursDepuisDebut();
+        if (toursRestants <= 0) {
+            System.out.println("4: Utiliser Capacité Ultime (" + personnage.getCapaciteUltime().getNom() + ")");
+        } else {
+            System.out.println("Capacité Ultime disponible dans " + toursRestants + " tour(s)");
+        }
+
         int choix = scanner.nextInt();
-        while (choix < 1 || choix > capacites.size()) 
+
+        while (choix < 1 || (choix > 3 && !(choix == 4 && personnage.getCapaciteUltime().estDisponible()))) 
         {
-            System.out.println("Veuillez choisir une option valide (1-" + capacites.size() + ").");
+            System.out.println("Veuillez choisir une option valide (1-3 ou 4 si capacité ultime disponible).");
             choix = scanner.nextInt();
         }
-        return choix; // Retourne l'indice de la capacité choisie
+
+        return choix;
     }
 
-    // Méthode pour choisir une action aléatoire pour l'ordinateur
-    public static int choisirActionAleatoire() 
+    public static int choisirActionAleatoire(PersonnageHxH personnage) 
     {
-        return (int) (Math.random() * 3) + 1; // Retourne un nombre entre 1 et 3
+        Random random = new Random();
+
+        if (personnage.getCapaciteUltime().estDisponible()) 
+        {
+            return random.nextInt(4) + 1; // Retourne un nombre entre 1 et 4
+        } 
+        else 
+        {
+            return random.nextInt(3) + 1; // Retourne un nombre entre 1 et 3 (attaque, défense, esquive)
+        }
     }
 
-    // Méthode utilitaire pour afficher une action en texte
+
     public static String actionToString(int action) 
     {
         switch (action) 
@@ -142,3 +185,4 @@ public class Main
         }
     }
 }
+
