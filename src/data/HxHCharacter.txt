@@ -18,3 +18,4 @@ Knuckle Bine, 1050, 95, 85, 80, Emission, 1900, A.P.R-Amortissement des Intérê
 Morel Mackernasey, 1000, 85, 75, 100, Matérialisation, 2200, Smoky Jail, Mur de Fumée, Stratégie de Fumée, Smoking Clones
 Biscuit Krueger, 1000, 80, 85, 95, Transformation, 2100, Transformation Ultime, Bouclier de Bonbons, Pas Enchanté, Wonderlust
 
+#personnage a venir..
