@@ -130,11 +130,10 @@ public class PersonnageHxH
 
     public String getEtat() 
     {
+        int toursRestantsUltime = Math.max(0, 3 - capaciteUltime.getToursDepuisDebut());
+
         return "Points de vie : " + vie + 
-               ", Cooldown Capacités : " +
-               "Attaque - " + capaciteOffensive.getCooldown() + ", " +
-               "Défense - " + capaciteDefensive.getCooldown() + ", " +
-               "Esquive - " + capaciteEsquive.getCooldown();
+               "Ultime disponible dans " + toursRestantsUltime + " tours";   // Affiche combien de tours avant que l'ultime soit tentée   // Ajout de l'état de la capacité ultime
     }
 
     public void annulerCooldown() 

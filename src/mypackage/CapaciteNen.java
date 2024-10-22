@@ -39,7 +39,8 @@ public abstract class CapaciteNen
 
     public void decrementerCooldown() 
     {
-        if (tourRestants > 0) {
+        if (tourRestants > 0) 
+        {
             tourRestants--;
         }
     }
